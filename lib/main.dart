@@ -3,7 +3,53 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(MaterialApp(
       title: "Contador de Pessoas",
-      home: Stack(
+      home: Home()));
+}
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+  int _people = 0;
+  String information = "Está vazio.";
+
+  void _changeLotation(int count) {
+    if(_people >= 0 && _people <= 10) { 
+      setState(() {
+        if((_people + count) < 0) {
+          _people = 0;
+        } else if ((_people + count) > 10) {
+          _people = _people;
+        } else {
+          _people += count;
+        }
+      });
+    }
+    changeInformation();
+  }
+
+  void changeInformation() {
+    if (_people < 1) {
+      setState(() {
+        information = "Está vazio.";
+      });
+    } else if (_people > 0 && _people < 10) {
+      setState(() {
+        information = "Resta: ${10 - _people}/10.";
+      });
+    } else {
+      setState(() {
+        information = "Lotado!";
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
         children: <Widget>[
           Image.asset(
             "images/restaurant.jpg",
@@ -24,7 +70,7 @@ void main() {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(20.0),
-                              child: Text("Pessoas: 0",
+                              child: Text("Pessoas:$_people",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
@@ -40,7 +86,9 @@ void main() {
                                 child: Text("+1",
                                     style: TextStyle(
                                         fontSize: 40.0, color: Colors.white)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  _changeLotation(1);
+                                },
                               ),
                             ),
                             Padding(
@@ -49,7 +97,9 @@ void main() {
                                 child: Text("-1",
                                     style: TextStyle(
                                         fontSize: 40.0, color: Colors.white)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  _changeLotation(-1);
+                                },
                               ),
                             ),
                           ],
@@ -59,7 +109,7 @@ void main() {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(20.0),
-                              child: Text("Pode Entrar!",
+                              child: Text(information,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontStyle: FontStyle.italic,
@@ -73,5 +123,6 @@ void main() {
             ],
           )
         ],
-      )));
+      );
+  }
 }
